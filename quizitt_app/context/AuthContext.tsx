@@ -1,8 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import api from '../services/api';
-import { TouchableOpacity, Text } from 'react-native';
 
 interface User {
   id: string;
@@ -40,17 +39,19 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  console.log("AuthProvider mounted");
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const hasInitialized = useRef(false);
 
-  
   useEffect(() => {
-    checkAuthStatus();
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      console.log("AuthProvider initialized");
+      checkAuthStatus();
+    }
   }, []);
 
- 
   useEffect(() => {
     if (token) {
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -73,7 +74,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(response.data.user);
           await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
         } catch (error: any) {
-         
           if (
             error?.response?.status === 401 ||
             error?.response?.status === 404
@@ -171,4 +171,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}; 
+};

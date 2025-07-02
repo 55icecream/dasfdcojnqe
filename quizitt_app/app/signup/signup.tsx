@@ -16,15 +16,14 @@ import {
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 
-// export default function Signup(props) {
 export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
   const [loading, setLoading] = useState(false);
-  const [showErrorModal, setShowErrorModal] = useState(false); // State for error modal
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   
   const navigation = useNavigation();
   const { register } = useAuth();
@@ -109,7 +108,7 @@ export default function Signup() {
             marginHorizontal: 46,
           }}
         >
-          {"Create an account"}
+          Create an account
         </Text>
         {/* Username Input */}
         <View
@@ -162,7 +161,7 @@ export default function Signup() {
               color: "#FFFFFF",
               fontSize: 16,
               marginVertical: 1,
-              flex: 1, // Allow text input to take available space
+              flex: 1,
             }}
           />
         </View>
@@ -199,7 +198,7 @@ export default function Signup() {
             keyboardType="email-address"
             placeholderTextColor="#827F7F"
             style={{
-              color: "#FFFFFF", // Changed to white for better contrast on dark background
+              color: "#FFFFFF",
               fontSize: 16,
               flex: 1,
             }}
@@ -303,7 +302,7 @@ export default function Signup() {
               fontWeight: "bold",
             }}
           >
-            {"Accept terms & condition"}
+            Accept terms & condition
           </Text>
         </View>
         <TouchableOpacity
@@ -328,7 +327,7 @@ export default function Signup() {
                 fontWeight: "bold",
               }}
             >
-              {"Sign Up"}
+              Sign Up
             </Text>
           )}
         </TouchableOpacity>
@@ -356,7 +355,7 @@ export default function Signup() {
               marginRight: 14,
             }}
           >
-            {"or continue with"}
+            or continue with
           </Text>
           <View
             style={{
@@ -454,7 +453,7 @@ export default function Signup() {
                 fontWeight: "bold",
               }}
             >
-              {"Already have an account? "}
+              Already have an account?{" "}
             </Text>
             <TouchableOpacity onPress={() => router.push("/login/login")}>
               <Text

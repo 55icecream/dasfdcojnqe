@@ -115,7 +115,7 @@ export default function HomeScreen() {
             marginHorizontal: 43,
           }}
         >
-          {"The fun way to get serious about studying!"}
+          The fun way to get serious about studying!
         </Text>
         <Link href="./login/login" asChild>
           <TouchableOpacity>
@@ -132,7 +132,8 @@ export default function HomeScreen() {
                 marginHorizontal: 14,
                 alignItems: "center",
               }}
-            >  <Text
+            >
+              <Text
                 style={{
                   color: "#FFFFFF",
                   fontSize: 20,
@@ -168,7 +169,7 @@ export default function HomeScreen() {
                   fontWeight: "bold",
                 }}
               >
-               Signup
+                Signup
               </Text>
             </LinearGradient>
           </TouchableOpacity>
@@ -177,6 +178,3 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
-
-
- 

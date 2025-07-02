@@ -18,7 +18,6 @@ import {
 import { getGoogleAuthUrl } from "@/services/api";
 import { useAuth } from "../../context/AuthContext";
 
-// export default function Login(props) {
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -149,7 +148,7 @@ export default function Login() {
               fontWeight: "bold",
             }}
           >
-            {"Login"}
+            Login
           </Text>
         </View>
         <View
@@ -288,7 +287,7 @@ export default function Login() {
               marginRight: 76,
             }}
           >
-            {"Remember Me"}
+            Remember Me
           </Text>
           <Text
             style={{
@@ -298,7 +297,7 @@ export default function Login() {
               flex: 1,
             }}
           >
-            {"Forgot Password?"}
+            Forgot Password?
           </Text>
         </View>
         <TouchableOpacity
@@ -323,7 +322,7 @@ export default function Login() {
                 fontWeight: "bold",
               }}
             >
-              {"Login"}
+              Login
             </Text>
           )}
         </TouchableOpacity>
@@ -351,7 +350,7 @@ export default function Login() {
               marginRight: 14,
             }}
           >
-            {"or continue with"}
+            or continue with
           </Text>
           <View
             style={{
@@ -409,7 +408,7 @@ export default function Login() {
                 fontWeight: "bold",
               }}
             >
-              {"Don't have an account? "}
+              Don't have an account?{" "}
             </Text>
             <TouchableOpacity onPress={() => router.push("/signup/signup")}>
               <Text
