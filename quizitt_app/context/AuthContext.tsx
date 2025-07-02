@@ -55,7 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     if (!hasInitialized.current) {
       hasInitialized.current = true;
-      console.log("AuthProvider initialized");
+      console.log("AuthProvider mounted");
       checkAuthStatus();
     }
   }, []);
@@ -80,7 +80,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           if (error?.response?.status === 401 || error?.response?.status === 404) {
             await logout();
           } else {
-            console.error('Error checking auth status:', error);
+            // If API call fails but we have stored user data, use it temporarily
+            try {
+              const parsedUser = JSON.parse(storedUser);
+              setUser(parsedUser);
+            } catch (parseError) {
+              console.error('Error parsing stored user data:', parseError);
+              await logout();
+            }
           }
         }
       }
@@ -145,7 +152,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await authAPI.verifyEmail(email, otp);
       
       // Refresh user data after email verification
-      await checkAuthStatus();
+      await refreshUser();
       
       console.log('Email verification successful');
     } catch (error: any) {
@@ -197,7 +204,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(null);
       setUser(null);
       console.log('Logout successful');
-      router.replace('/login/login');
     }
   };
 

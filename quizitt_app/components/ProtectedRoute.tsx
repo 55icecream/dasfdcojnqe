@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
@@ -15,32 +15,39 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requireSurvey = false,
 }) => {
   const { user, isLoading } = useAuth();
+  const navigationRef = useRef(false);
 
   useEffect(() => {
-    if (!isLoading) {
-      if (requireAuth && !user) {
-        // User is not authenticated, redirect to login
-        router.replace('/login/login');
-        return;
-      }
+    if (isLoading || navigationRef.current) return;
 
-      if (user && requireSurvey && !user.surveyFilled) {
-        // User is authenticated but hasn't filled survey, redirect to survey
-        router.replace('/survey/survey1');
-        return;
-      }
+    if (requireAuth && !user) {
+      // User is not authenticated, redirect to login
+      navigationRef.current = true;
+      router.replace('/login/login');
+      setTimeout(() => { navigationRef.current = false; }, 1000);
+      return;
+    }
 
-      if (user && !requireSurvey && user.surveyFilled) {
-        // User has filled survey but is on a survey page, redirect to dashboard
-        router.replace('/dashboard/dashboardpage');
-        return;
-      }
+    if (user && requireSurvey && !user.surveyFilled) {
+      // User is authenticated but hasn't filled survey, redirect to survey
+      navigationRef.current = true;
+      router.replace('/survey/survey1');
+      setTimeout(() => { navigationRef.current = false; }, 1000);
+      return;
+    }
+
+    if (user && !requireSurvey && user.surveyFilled) {
+      // User has filled survey but is on a survey page, redirect to dashboard
+      navigationRef.current = true;
+      router.replace('/dashboard/dashboardpage');
+      setTimeout(() => { navigationRef.current = false; }, 1000);
+      return;
     }
   }, [user, isLoading, requireAuth, requireSurvey]);
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#222B40' }}>
         <ActivityIndicator size="large" color="#9C73F4" />
       </View>
     );
@@ -52,5 +59,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // This should not be reached due to the useEffect redirect
-  return null;
-}; 
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#222B40' }}>
+      <ActivityIndicator size="large" color="#9C73F4" />
+    </View>
+  );
+};
