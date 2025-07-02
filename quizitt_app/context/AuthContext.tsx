@@ -71,9 +71,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         try {
           const response = await api.get('/api/v1/auth/me');
-          setUser(response.data.user);
-          await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+          const userData = response.data.user;
+          console.log('User data from API:', userData);
+          setUser(userData);
+          await AsyncStorage.setItem('user', JSON.stringify(userData));
         } catch (error: any) {
+          console.error('Error fetching user data:', error);
           if (
             error?.response?.status === 401 ||
             error?.response?.status === 404
@@ -101,6 +104,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setToken(newToken);
       setUser(userData);
+
+      console.log('Login successful, user data:', userData);
     } catch (error: any) {
       console.error('Login error:', error);
       throw new Error(error.response?.data?.message || 'Login failed');
@@ -117,6 +122,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setToken(newToken);
       setUser(userData);
+
+      console.log('Registration successful, user data:', userData);
     } catch (error: any) {
       console.error('Registration error:', error);
       throw new Error(error.response?.data?.message || 'Registration failed');
@@ -127,8 +134,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await api.post('/api/v1/auth/verify-email', { email, otp });
       
+      // Refresh user data after email verification
       await checkAuthStatus();
       
+      console.log('Email verification successful');
     } catch (error: any) {
       console.error('Email verification error:', error);
       throw new Error(error.response?.data?.message || 'Email verification failed');
@@ -152,6 +161,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await AsyncStorage.removeItem('user');
       setToken(null);
       setUser(null);
+      console.log('Logout successful');
       router.replace('/login/login');
     } catch (error) {
       console.error('Logout error:', error);
