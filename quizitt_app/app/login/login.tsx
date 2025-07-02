@@ -28,19 +28,8 @@ export default function Login() {
   const navigation = useNavigation();
   const { login, user, isLoading } = useAuth();
 
-  useEffect(() => {
-    if (!isLoading && user) {
-      if (user.emailVerified) {
-        if (user.surveyFilled) {
-          router.replace("../dashboard/dashboardpage");
-        } else {
-          router.replace("../survey/survey1");
-        }
-      } else {
-        router.replace("../email-verification/email-verification");
-      }
-    }
-  }, [user, isLoading]);
+  // Don't redirect here - let the _layout.tsx handle navigation
+  // The useEffect in _layout.tsx will handle proper routing based on user state
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prevState) => !prevState);
@@ -56,7 +45,7 @@ export default function Login() {
     setLoading(true);
     try {
       await login(email, password);
-      // Navigation is handled in the auth context
+      // Navigation will be handled by _layout.tsx based on user state
     } catch (err: unknown) {
       console.error(err);
 
@@ -81,8 +70,7 @@ export default function Login() {
 
       if (result.type === "success" && result.url) {
         console.log("Google OAuth success:", result.url);
-
-        router.push("/dashboard/dashboardpage");
+        // Navigation will be handled by _layout.tsx
       } else if (result.type === "cancel") {
         setErrorMessage("Google login cancelled.");
         setShowErrorModal(true);

@@ -48,7 +48,7 @@ export default function Signup() {
     setLoading(true);
     try {
       await register(username, email, password);
-      // Navigation is handled in the auth context
+      // Navigation will be handled by _layout.tsx based on user state
     } catch (err) {
       console.error(err);
       let message = "Registration failed. Please try again.";
